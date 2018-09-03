@@ -24,10 +24,8 @@ class Memory
     List *head;
 
   public:
-    Memory(/* args */);
-    ~Memory();
     const Instruction &fetch(Registers *r);
-    Memory();
+    Memory(/* args */);
     ~Memory();
     Word &insert(Word *w);
     const Word &operator[](int a) const;

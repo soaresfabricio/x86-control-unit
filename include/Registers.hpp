@@ -28,6 +28,7 @@ class Registers
         ecx,
         flags
     } Name;
+    
     Registers(/* args */);
 
     int *address(char *, Memory &, const Label &);

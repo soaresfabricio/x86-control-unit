@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Instruction.hpp"
 #include "Registers.hpp"
 #include "Label.hpp"
@@ -28,16 +30,6 @@ class Decoder
     void imull(Registers *);
 
   public:
-    Decoder(/* args */);
-    ~Decoder();
     void execute(const Instruction & n, Registers *, Memory & m);
-    void parse(const Instruction & i, Registers *, Memory & m, const Labels & l);
+    void parse(const Instruction & i, Registers *, Memory & m, const Label & l);
 };
-
-Decoder::Decoder(/* args */)
-{
-}
-
-Decoder::~Decoder()
-{
-}

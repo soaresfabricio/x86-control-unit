@@ -13,15 +13,6 @@ class Label
 
   public:
     Label(/* args */);
-    ~Label();
     int find(const char *) const;
-    friend istream &operator>>(istream &is, Label &l);
+    friend istream &operator>>(istream &is, Label &lbls);
 };
-
-Label::Label(/* args */)
-{
-}
-
-Label::~Label()
-{
-}

@@ -7,9 +7,8 @@ class Data: public Word
 private:
     int num;
 public:
-    Data(int address);
+    Data(int);
     int & get();
     const int & get() const;
-    int operator = (int value);
-    ~Data();
+    int operator = (int);
 };

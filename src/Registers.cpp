@@ -1,23 +1,23 @@
 #include <cstring>
 #include <iostream>
+#include <iomanip>
 #include <cstdlib>
-#include "Registers.hpp"
+#include "../include/Registers.hpp"
 
 using namespace std;
 
 // Defaulting value
 Registers::Registers()
 {
-    registers[esp] = 1000;
-    registers[ebp] = 996;
-    registers[eip] = 100;
+    registers[esp] = 1000; // stack pointer
+    registers[ebp] = 996; // stack frame
+    registers[eip] = 100; // extended instruction pointer
     registers[eax] = 0;
     registers[edx] = 0;
     registers[ebx] = 0;
     registers[ecx] = 0;
     registers[flags] = 0xC0;
 }
-
 
 // Fetches the value for a certain op
 int *Registers::address(char *op, Memory &mem, const Label &l)
@@ -31,6 +31,7 @@ int *Registers::address(char *op, Memory &mem, const Label &l)
     if (op[0] == '$')
     {
         value = atoi(&op[1]);
+        return &value;
     }
 
     // Scaled mode: These modes let you multiply the index register in the
@@ -119,6 +120,14 @@ int Registers::string_to_reg_num(const char *str) const
     return i;
 }
 
+int Registers::get(Name name) const
+{
+    if (name < eax || name > ecx)
+        return 0;
+
+    return registers[name];
+}
+
 void Registers::set(Name name, int value)
 {
     // Bound checking
@@ -150,4 +159,64 @@ bool Registers::get_sign_flag() const{
 int Registers::operator+= (int x){
     registers[esp] += x;
     return registers[esp];
+}
+
+ostream& operator<< (ostream &os, const Registers &r)
+{
+  os << " eip: " << right << setw(3) << r.registers[Registers::eip] 
+    << " eax: " << setw(3) << r.registers[Registers::eax] 
+    << " ebp: " << setw(3) << r.registers[Registers::ebp] 
+    << " esp: " << setw(3) << r.registers[Registers::esp] 
+    << " edx: " << setw(3) << r.registers[Registers::edx] 
+    << " ebx: " << setw(3) << r.registers[Registers::ebx] 
+    << " ecx: " << setw(3) << r.registers[Registers::ecx] 
+    << " flags: " << setw(3) << r.registers[Registers::flags] << endl;
+  
+  return os;
+}
+
+void Registers::load_from_file(string file_name)
+{
+  ifstream input(file_name);
+
+  if (input.is_open())
+  {
+    int value = 0;
+    int i = 0;
+    while (input >> value)
+    {
+      registers[i] = value;
+      i++;
+    }
+    
+    registers[esp] = 1000;
+    registers[ebp] = 996;
+    registers[eip] = 100;
+
+    cout << "Registers loaded from " + file_name << endl;
+  }
+  else
+  {
+    cout << "There was a problem opening the file: " + file_name << endl;
+  }
+}
+
+
+void Registers::dump_to_file(string file_name)
+{
+  ofstream output(file_name);
+
+  if (output.is_open())
+  {
+    cout << "Saving registers to " + file_name;
+
+    for (auto r : registers)
+    {
+      output << r << endl;
+    }
+
+    cout << "... DONE" << endl;
+  } else {
+      cout << "There was a problem opening the file: " + file_name << endl;
+  }
 }
