@@ -8,7 +8,7 @@ Instruction::Instruction(int addr) : Word(addr), info(NULL){}
 
 Instruction::~Instruction()
 {
-    if (ino)
+    if (info)
         delete[] info;
 }
 
