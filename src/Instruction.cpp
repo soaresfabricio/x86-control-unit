@@ -1,5 +1,6 @@
 #include "../include/Instruction.hpp"
 #include <iomanip>
+#include <cstring>
 
 using namespace std;
 
